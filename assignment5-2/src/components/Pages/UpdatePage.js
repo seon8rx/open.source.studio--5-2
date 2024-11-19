@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 function UpdatePage() {
@@ -16,13 +16,7 @@ function UpdatePage() {
     const studentIdRef = useRef(null);
     const phoneRef = useRef(null);
 
-    useEffect(() => {
-        if (id) {
-            fetchStudentDetails();
-        }
-    }, [id]);
-
-    const fetchStudentDetails = async () => {
+    const fetchStudentDetails = useCallback(async () => {
         try {
             const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
             if (!response.ok) {
@@ -33,7 +27,13 @@ function UpdatePage() {
         } catch (error) {
             console.error("데이터 로드 실패:", error.message);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        if (id) {
+            fetchStudentDetails();
+        }
+    }, [id, fetchStudentDetails]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
