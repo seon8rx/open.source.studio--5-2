@@ -9,14 +9,33 @@ function ShowList() {
         loadStudentList();
     }, []);
 
+    // const loadStudentList = async () => {
+    //     try {
+    //         // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+    //         const response = await fetch("/api/students/students");
+    //         const data = await response.json();
+    //         setStudents(data);
+    //     } catch (error) {
+    //         console.error("데이터 로드 실패:", error);
+    //     }
+    // };
+
     const loadStudentList = async () => {
         try {
-            // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
-            const response = await fetch("/api/students/students");
+            const response = await fetch("/api/students/students"); // Netlify 프록시 사용
+            if (!response.ok) throw new Error("API 요청 실패");
+            
             const data = await response.json();
+    
+            // 데이터가 배열인지 확인
+            if (!Array.isArray(data)) {
+                throw new Error("API에서 반환된 데이터가 배열이 아닙니다.");
+            }
+    
             setStudents(data);
         } catch (error) {
-            console.error("데이터 로드 실패:", error);
+            console.error("데이터 로드 실패:", error.message);
+            setStudents([]); // 데이터 초기화
         }
     };
 
