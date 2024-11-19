@@ -6,8 +6,9 @@ function ShowList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadStudentList();
-    }, []);
+        fetchStudentDetails();
+    }, [fetchStudentDetails]);
+
 
     const loadStudentList = async () => {
         try {

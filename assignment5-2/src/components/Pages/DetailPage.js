@@ -1,42 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-
-// function DetailPage() {
-//     const { id } = useParams();
-//     const [student, setStudent] = useState(null);
-
-//     useEffect(() => {
-//         fetchStudentDetails();
-//     }, []);
-
-//     const fetchStudentDetails = async () => {
-//         try {
-//             const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
-//             const data = await response.json();
-//             setStudent(data);
-//         } catch (error) {
-//             console.error("데이터 로드 실패:", error);
-//         }
-//     };
-
-//     return (
-//         <div className="container mt-5">
-//             {student ? (
-//                 <div>
-//                     <h1>{student.name}의 세부정보</h1>
-//                     <p><strong>이메일:</strong> {student.email}</p>
-//                     <p><strong>학번:</strong> {student.studentId}</p>
-//                     <p><strong>전화번호:</strong> {student.phone}</p>
-//                 </div>
-//             ) : (
-//                 <p>로딩 중...</p>
-//             )}
-//         </div>
-//     );
-// }
-
-// export default DetailPage;
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PageLayout from "../PageLayout";
@@ -48,7 +9,7 @@ function DetailPage() {
 
     useEffect(() => {
         fetchStudentDetails();
-    }, []);
+    }, [fetchStudentDetails]);
 
     const fetchStudentDetails = async () => {
         try {

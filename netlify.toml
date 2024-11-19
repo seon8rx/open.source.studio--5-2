@@ -1,4 +1,4 @@
 [build]
   base = "assignment5-2"
-  command = "CI=true npm run build"
+  command = "npm run build"
   publish = "build"
