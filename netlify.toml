@@ -3,3 +3,8 @@
   to = "https://672e1dd5229a881691ef09f0.mockapi.io/:splat"
   status = 200
   force = true
+
+[build]
+  base = "assignment5-2"
+  publish = "build"
+  command = "npm run build"
