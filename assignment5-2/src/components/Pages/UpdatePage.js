@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import PageLayout from "../PageLayout";
 
 function UpdatePage() {
     const { id } = useParams();
@@ -35,13 +36,23 @@ function UpdatePage() {
         }
     }, [id, fetchStudentDetails]);
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-        if (id) setEditCount((prevCount) => prevCount + 1);
+        setEditCount((prevCount) => prevCount + 1);
+
+        try {
+            await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, [name]: value }),
+            });
+        } catch (error) {
+            console.error("API 업데이트 실패:", error.message);
+        }
     };
 
     const validateInputs = () => {
@@ -68,37 +79,16 @@ function UpdatePage() {
         return true;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateInputs()) return;
-
-        const url = id
-            ? `https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`
-            : "https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students";
-        const method = id ? "PUT" : "POST";
-
-        try {
-            const response = await fetch(url, {
-                method,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-            if (!response.ok) {
-                throw new Error(id ? "수정 실패" : "추가 실패");
-            }
-            alert(id ? "수정이 완료되었습니다!" : "학생 추가가 완료되었습니다!");
-            navigate("/list");
-        } catch (error) {
-            console.error(error.message);
-            alert("서버와 통신 중 문제가 발생했습니다.");
-        }
+        alert("모든 수정이 서버에 반영되었습니다.");
     };
 
     return (
-        <div className="container mt-5">
-            <h1>{id ? "학생 수정" : "학생 추가"}</h1>
-            {id && <p>수정된 횟수: {editCount}회</p>}
+        <PageLayout title={id ? "학생 수정" : "학생 추가"}>
             <form onSubmit={handleSubmit}>
+                <p>수정된 횟수: {editCount}회</p>
                 <div className="mb-3">
                     <label>이름</label>
                     <input
@@ -147,11 +137,11 @@ function UpdatePage() {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary me-3">
-                    {id ? "수정 완료" : "학생 추가"}
+                <button type="button" className="btn btn-secondary" onClick={() => navigate("/list")}>
+                    목록으로
                 </button>
             </form>
-        </div>
+        </PageLayout>
     );
 }
 

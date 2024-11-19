@@ -6,9 +6,8 @@ function ShowList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchStudentDetails();
-    }, [fetchStudentDetails]);
-
+        loadStudentList();
+    }, []);
 
     const loadStudentList = async () => {
         try {
@@ -28,7 +27,7 @@ function ShowList() {
             await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`, {
                 method: "DELETE",
             });
-            alert("삭제가 완료되었습니다!")
+            alert("삭제가 완료되었습니다!");
             loadStudentList();
         } catch (error) {
             console.error("삭제 실패:", error);
