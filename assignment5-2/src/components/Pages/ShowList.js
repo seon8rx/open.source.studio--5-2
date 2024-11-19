@@ -22,7 +22,8 @@ function ShowList() {
 
     const loadStudentList = async () => {
         try {
-            const response = await fetch("/api/students/students"); // Netlify 프록시 사용
+            // const response = await fetch("/api/students/students"); // Netlify 프록시 사용
+            const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
             if (!response.ok) throw new Error("API 요청 실패");
             
             const data = await response.json();
