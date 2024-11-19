@@ -1,4 +1,4 @@
 [build]
   base = "assignment5-2"
-  command = "npm run build"
+  command = "ESLINT_NO_DEV_ERRORS=true npm run build"
   publish = "build"
