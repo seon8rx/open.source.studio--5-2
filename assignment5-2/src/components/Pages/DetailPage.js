@@ -9,7 +9,8 @@ function DetailPage() {
 
     const fetchStudentDetails = useCallback(async () => {
         try {
-            const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
+            // const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
+            const response = await fetch("/api/students/students");
             if (!response.ok) {
                 throw new Error("학생 데이터를 가져오는 데 실패했습니다.");
             }

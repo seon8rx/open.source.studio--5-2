@@ -11,7 +11,8 @@ function ShowList() {
 
     const loadStudentList = async () => {
         try {
-            const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+            // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+            const response = await fetch("/api/students/students");
             const data = await response.json();
             setStudents(data);
         } catch (error) {
