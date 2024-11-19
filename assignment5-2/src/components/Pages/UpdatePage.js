@@ -5,6 +5,7 @@ import PageLayout from "../PageLayout";
 function UpdatePage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const isEditMode = !!id; 
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -18,6 +19,7 @@ function UpdatePage() {
     const phoneRef = useRef(null);
 
     const fetchStudentDetails = useCallback(async () => {
+        if (!id) return; 
         try {
             const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
             if (!response.ok) {
@@ -31,27 +33,32 @@ function UpdatePage() {
     }, [id]);
 
     useEffect(() => {
-        if (id) {
-            fetchStudentDetails();
-        }
-    }, [id, fetchStudentDetails]);
+        fetchStudentDetails();
+    }, [fetchStudentDetails]);
 
     const handleChange = async (e) => {
         const { name, value } = e.target;
+
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-        setEditCount((prevCount) => prevCount + 1);
 
-        try {
-            await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, [name]: value }),
-            });
-        } catch (error) {
-            console.error("API 업데이트 실패:", error.message);
+        if (isEditMode) {
+            setEditCount((prevCount) => prevCount + 1);
+        }
+
+        if (isEditMode) {
+            try {
+                await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ...formData, [name]: value }),
+                });
+                console.log(`필드 "${name}"가 업데이트되었습니다.`);
+            } catch (error) {
+                console.error("API 업데이트 실패:", error.message);
+            }
         }
     };
 
@@ -79,16 +86,36 @@ function UpdatePage() {
         return true;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateInputs()) return;
-        alert("모든 수정이 서버에 반영되었습니다.");
+
+        const url = isEditMode
+            ? `https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`
+            : "https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students";
+        const method = isEditMode ? "PUT" : "POST";
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            if (!response.ok) {
+                throw new Error(isEditMode ? "수정 실패" : "추가 실패");
+            }
+            alert(isEditMode ? "수정이 완료되었습니다!" : "학생 추가가 완료되었습니다!");
+            navigate("/list");
+        } catch (error) {
+            console.error(error.message);
+            alert("서버와 통신 중 문제가 발생했습니다.");
+        }
     };
 
     return (
-        <PageLayout title={id ? "학생 수정" : "학생 추가"}>
+        <PageLayout title={isEditMode ? "학생 수정" : "학생 추가"}>
             <form onSubmit={handleSubmit}>
-                <p>수정된 횟수: {editCount}회</p>
+                {isEditMode && <p>수정된 횟수: {editCount}회</p>}
                 <div className="mb-3">
                     <label>이름</label>
                     <input
@@ -137,6 +164,11 @@ function UpdatePage() {
                         required
                     />
                 </div>
+                {!isEditMode && (
+                    <button type="submit" className="btn btn-primary me-3">
+                        학생 추가
+                    </button>
+                )}
                 <button type="button" className="btn btn-secondary" onClick={() => navigate("/list")}>
                     목록으로
                 </button>
