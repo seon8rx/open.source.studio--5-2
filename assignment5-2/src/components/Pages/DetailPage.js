@@ -7,11 +7,27 @@ function DetailPage() {
     const navigate = useNavigate();
     const [student, setStudent] = useState(null);
 
+    // const fetchStudentDetails = useCallback(async () => {
+    //     try {
+    //         // const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
+    //         // const response = await fetch("/api/students/students");
+    //         // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+            
+    //         if (!response.ok) {
+    //             throw new Error("학생 데이터를 가져오는 데 실패했습니다.");
+    //         }
+    //         const data = await response.json();
+    //         setStudent(data);
+    //     } catch (error) {
+    //         console.error("데이터 로드 실패:", error.message);
+    //     }
+    // }, [id]);
+
+    const API_URL = process.env.REACT_APP_API_BASE_URL || "/api";
+
     const fetchStudentDetails = useCallback(async () => {
         try {
-            const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
-            // const response = await fetch("/api/students/students");
-            // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+            const response = await fetch(`${API_URL}/students/${id}`);
             if (!response.ok) {
                 throw new Error("학생 데이터를 가져오는 데 실패했습니다.");
             }
@@ -20,7 +36,7 @@ function DetailPage() {
         } catch (error) {
             console.error("데이터 로드 실패:", error.message);
         }
-    }, [id]);
+    }, [API_URL, id]);
 
     useEffect(() => {
         fetchStudentDetails();
