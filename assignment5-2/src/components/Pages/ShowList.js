@@ -20,25 +20,40 @@ function ShowList() {
     //     }
     // };
 
+    const API_URL = process.env.REACT_APP_API_BASE_URL || "/api";
+
     const loadStudentList = async () => {
         try {
-            // const response = await fetch("/api/students/students"); // Netlify 프록시 사용
-            const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
-            if (!response.ok) throw new Error("API 요청 실패");
-            
-            const data = await response.json();
-    
-            // 데이터가 배열인지 확인
-            if (!Array.isArray(data)) {
-                throw new Error("API에서 반환된 데이터가 배열이 아닙니다.");
+            const response = await fetch(`${API_URL}/students`);
+            if (!response.ok) {
+                throw new Error("API 요청 실패");
             }
-    
-            setStudents(data);
+            const data = await response.json();
+            console.log("데이터 로드 성공:", data);
         } catch (error) {
             console.error("데이터 로드 실패:", error.message);
-            setStudents([]); // 데이터 초기화
         }
     };
+
+    // const loadStudentList = async () => {
+    //     try {
+    //         // const response = await fetch("/api/students/students"); // Netlify 프록시 사용
+    //         const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
+    //         if (!response.ok) throw new Error("API 요청 실패");
+            
+    //         const data = await response.json();
+    
+    //         // 데이터가 배열인지 확인
+    //         if (!Array.isArray(data)) {
+    //             throw new Error("API에서 반환된 데이터가 배열이 아닙니다.");
+    //         }
+    
+    //         setStudents(data);
+    //     } catch (error) {
+    //         console.error("데이터 로드 실패:", error.message);
+    //         setStudents([]); // 데이터 초기화
+    //     }
+    // };
 
     const handleDeleteClick = async (id) => {
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
