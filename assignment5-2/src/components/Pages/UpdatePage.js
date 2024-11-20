@@ -18,12 +18,12 @@ function UpdatePage() {
     const studentIdRef = useRef(null);
     const phoneRef = useRef(null);
 
-    const API_URL = process.env.REACT_APP_API_BASE_URL || "/api";
-
     const fetchStudentDetails = useCallback(async () => {
         if (!id) return; 
         try {
-            const response = await fetch(`${API_URL}/students/${id}`);
+            const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
+            // const response = await fetch("/api/students/students");
+            // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
             if (!response.ok) {
                 throw new Error("학생 데이터를 가져오는 데 실패했습니다.");
             }
@@ -32,49 +32,7 @@ function UpdatePage() {
         } catch (error) {
             console.error("데이터 로드 실패:", error.message);
         }
-    }, [API_URL, id]); // 의존성 배열에 API_URL 추가
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateInputs()) return;
-
-        const url = isEditMode
-            ? `${API_URL}/students/${id}`
-            : `${API_URL}/students`;
-        const method = isEditMode ? "PUT" : "POST";
-
-        try {
-            const response = await fetch(url, {
-                method,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-            if (!response.ok) {
-                throw new Error(isEditMode ? "수정 실패" : "추가 실패");
-            }
-            alert(isEditMode ? "수정이 완료되었습니다!" : "학생 추가가 완료되었습니다!");
-            navigate("/list");
-        } catch (error) {
-            console.error(error.message);
-            alert("서버와 통신 중 문제가 발생했습니다.");
-        }
-    };
-
-    // const fetchStudentDetails = useCallback(async () => {
-    //     if (!id) return; 
-    //     try {
-    //         const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
-    //         // const response = await fetch("/api/students/students");
-    //         // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
-    //         if (!response.ok) {
-    //             throw new Error("학생 데이터를 가져오는 데 실패했습니다.");
-    //         }
-    //         const data = await response.json();
-    //         setFormData(data);
-    //     } catch (error) {
-    //         console.error("데이터 로드 실패:", error.message);
-    //     }
-    // }, [id]);
+    }, [id]);
 
     useEffect(() => {
         fetchStudentDetails();
@@ -130,33 +88,31 @@ function UpdatePage() {
         return true;
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     if (!validateInputs()) return;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateInputs()) return;
 
-    //     const API_URL = process.env.REACT_APP_API_BASE_URL || "/api";
+        const url = isEditMode
+            ? `https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`
+            : "https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students";
+        const method = isEditMode ? "PUT" : "POST";
 
-    //     const url = isEditMode
-    //         ? `${API_URL}/students/${id}`
-    //         : `${API_URL}/students`;
-    //     const method = isEditMode ? "PUT" : "POST";
-
-    //     try {
-    //         const response = await fetch(url, {
-    //             method,
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify(formData),
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error(isEditMode ? "수정 실패" : "추가 실패");
-    //         }
-    //         alert(isEditMode ? "수정이 완료되었습니다!" : "학생 추가가 완료되었습니다!");
-    //         navigate("/list");
-    //     } catch (error) {
-    //         console.error(error.message);
-    //         alert("서버와 통신 중 문제가 발생했습니다.");
-    //     }
-    // };
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            if (!response.ok) {
+                throw new Error(isEditMode ? "수정 실패" : "추가 실패");
+            }
+            alert(isEditMode ? "수정이 완료되었습니다!" : "학생 추가가 완료되었습니다!");
+            navigate("/list");
+        } catch (error) {
+            console.error(error.message);
+            alert("서버와 통신 중 문제가 발생했습니다.");
+        }
+    };
 
     return (
         <PageLayout title={isEditMode ? "학생 수정" : "학생 추가"}>
