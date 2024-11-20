@@ -9,7 +9,6 @@ function DetailPage() {
 
     const fetchStudentDetails = useCallback(async () => {
         try {
-            console.log("id:", id); // id 값 확인  
             // const response = await fetch(`https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students/${id}`);
             const response = await fetch(`/api/students/students/${id}`);
             // const response = await fetch("https://672e1dd5229a881691ef09f0.mockapi.io/api/students/students");
