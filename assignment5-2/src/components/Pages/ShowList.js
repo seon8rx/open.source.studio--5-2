@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ShowList() {
-    const [students, setStudents] = useState([]);
+    // const [students, setStudents] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         loadStudentList();
-    }, []);
+    }, [loadStudentList]);
 
     // const loadStudentList = async () => {
     //     try {
