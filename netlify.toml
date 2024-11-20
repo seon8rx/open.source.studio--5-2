@@ -3,6 +3,11 @@
   to = "https://672e1dd5229a881691ef09f0.mockapi.io/api/:splat"
   status = 200
 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 [build]
   base = "assignment5-2"
   publish = "build"
