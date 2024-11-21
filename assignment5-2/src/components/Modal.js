@@ -1,8 +1,8 @@
-
 import React from "react";
+import ReactDOM from "react-dom";
 
-function Modal({ children, onClose }) {
-    return (
+const Modal = ({ children, onClose }) => {
+    return ReactDOM.createPortal(
         <div style={styles.overlay}>
             <div style={styles.modal}>
                 <button onClick={onClose} style={styles.closeButton}>
@@ -10,9 +10,10 @@ function Modal({ children, onClose }) {
                 </button>
                 {children}
             </div>
-        </div>
+        </div>,
+        document.body // 모달을 body에 렌더링하여 다른 컴포넌트 위에 표시
     );
-}
+};
 
 const styles = {
     overlay: {
@@ -21,11 +22,11 @@ const styles = {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)", // 배경 흐리게
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 1000,
+        zIndex: 1000, // 최상단 표시
     },
     modal: {
         backgroundColor: "#fff",
@@ -33,8 +34,8 @@ const styles = {
         borderRadius: "8px",
         maxWidth: "600px",
         width: "100%",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
         position: "relative",
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
     },
     closeButton: {
         position: "absolute",
